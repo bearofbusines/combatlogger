@@ -1,0 +1,4 @@
+name: CombatLogger
+version: '${version}'
+main: org.bear.combatlogger.CombatLogger
+api-version: '1.20'
