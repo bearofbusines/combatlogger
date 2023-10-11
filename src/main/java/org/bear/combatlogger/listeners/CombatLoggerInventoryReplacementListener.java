@@ -10,7 +10,9 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class CombatLoggerReplacementListener implements Listener {
+import java.util.Objects;
+
+public class CombatLoggerInventoryReplacementListener implements Listener {
     @EventHandler
     public void mobDeath(EntityDeathEvent deathEvent){
         if(CombatLogger.disableing) return;
@@ -23,7 +25,7 @@ public class CombatLoggerReplacementListener implements Listener {
         for (ItemStack item : items) {
             System.out.println(item);
             if (item != null)
-                location.getWorld().dropItem(location, item);
+                Objects.requireNonNull(location.getWorld()).dropItem(location, item);
         }
         CombatLoggedInventories.removeFromLoggedInventories(zombie.getUniqueId());
 

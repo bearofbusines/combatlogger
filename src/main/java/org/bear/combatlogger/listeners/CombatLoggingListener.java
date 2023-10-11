@@ -1,9 +1,12 @@
-package org.bear.combatLogger.listeners;
+package org.bear.combatlogger.listeners;
 
-import org.bear.combatLogger.data.CombatLoggedInventories;
-import org.bear.combatLogger.data.InCombat;
+import org.bear.combatlogger.CombatLogger;
+import org.bear.combatlogger.data.CombatLoggedInventories;
+import org.bear.combatlogger.data.InCombat;
 import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -18,6 +21,7 @@ public class CombatLoggingListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent quitEvent){
+        if(CombatLogger.disableing) return;
         Player player = quitEvent.getPlayer();
         if (!InCombat.isInCombat(player.getUniqueId()))return;
 
@@ -45,8 +49,8 @@ public class CombatLoggingListener implements Listener {
 
         CombatLoggedInventories.putInLoggedInventories(zombie.getUniqueId(), inventory);
         player.setHealth(0);
-        Player otherPlayer = InCombat.getOtherPlayer(InCombat.getIndex(player.getUniqueId()));
-        Bukkit.broadcastMessage(ChatColor.GREEN + bullyText(otherPlayer) + " combat logged on " + player.getName());
+        Player otherPlayer = InCombat.getOtherPlayer(player.getUniqueId());
+        Bukkit.broadcastMessage(ChatColor.YELLOW + bullyText(otherPlayer) + " combat logged on " + player.getName());
 
         InCombat.removeFromCombat(player.getUniqueId());
 

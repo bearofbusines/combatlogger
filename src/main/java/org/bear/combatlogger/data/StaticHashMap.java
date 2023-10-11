@@ -1,4 +1,4 @@
-package org.bear.combatlogger.config;
+package org.bear.combatlogger.data;
 
 import org.bukkit.inventory.Inventory;
 

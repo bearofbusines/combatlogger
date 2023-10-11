@@ -1,4 +1,4 @@
-package org.bear.combatLogger.snipets;
+package org.bear.combatlogger.snipets;
 
 public class Tetruple<X, Y, Z, W> {
     public X x;

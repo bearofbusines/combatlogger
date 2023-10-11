@@ -1,7 +1,6 @@
-package org.bear.application.data;
+package org.bear.combatlogger.data;
 
-import org.bear.application.config.DataFile;
-import org.bear.application.config.StaticHashMap;
+import org.bear.combatlogger.config.DataFile;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 
@@ -12,15 +11,17 @@ public class CombatLoggedInventories {
 
     public static boolean isInLoggedInventories(UUID uuid){
         FileConfiguration configuration = loggedInventories.getConfig();
-        StaticHashMap inventories = (StaticHashMap) configuration.get("inventories", new StaticHashMap());
-
+        System.out.println(configuration.getConfigurationSection("inventories"));
+        StaticHashMap inventories = (StaticHashMap) configuration.getConfigurationSection("inventories");
+        assert inventories != null;
         Inventory inventory = (Inventory) inventories.get(uuid);
         return inventory != null;
     }
 
     public static void removeFromLoggedInventories(UUID uuid){
         FileConfiguration configuration = loggedInventories.getConfig();
-        StaticHashMap inventories = (StaticHashMap) configuration.get("inventories", new StaticHashMap());
+        StaticHashMap inventories = (StaticHashMap) configuration.getConfigurationSection("inventories");
+        assert inventories != null;
         inventories.remove(uuid);
         configuration.set("inventories", inventories);
        loggedInventories.saveConfig();
@@ -28,7 +29,9 @@ public class CombatLoggedInventories {
 
     public static void putInLoggedInventories(UUID uuid, Inventory inventory){
         FileConfiguration configuration = loggedInventories.getConfig();
-        StaticHashMap inventories = (StaticHashMap) configuration.get("inventories", new StaticHashMap());
+        System.out.println(configuration.getConfigurationSection("inventories"));
+        StaticHashMap inventories = (StaticHashMap) configuration.getConfigurationSection("inventories");
+        assert inventories != null;
         inventories.put(uuid, inventory);
         configuration.set("inventories", inventories);
        loggedInventories.saveConfig();
@@ -37,9 +40,9 @@ public class CombatLoggedInventories {
 
         FileConfiguration configuration = loggedInventories.getConfig();
         assert configuration != null;
-        StaticHashMap inventories = (StaticHashMap) configuration.get("inventories", new StaticHashMap());
+        StaticHashMap inventories = (StaticHashMap) configuration.getConfigurationSection("inventories");
+        assert inventories != null;
         Inventory inventory = (Inventory) inventories.get(uuid);
-
         assert inventory != null;
         return inventory;
     }
@@ -49,7 +52,8 @@ public class CombatLoggedInventories {
         if (!loggedInventories.getConfig().contains("inventories")) {
             System.out.println("BEARS COMBAT-LOGGER creating new loggedInventories.yml");
             StaticHashMap loggers =  new StaticHashMap();
-            CombatLoggedInventories.loggedInventories.getConfig().set("inventories", loggers);
+            //CombatLoggedInventories.loggedInventories.getConfig().set("inventories", loggers);
+            CombatLoggedInventories.loggedInventories.getConfig().createSection("inventories", loggers);
             CombatLoggedInventories.loggedInventories.saveConfig();
         }
     }

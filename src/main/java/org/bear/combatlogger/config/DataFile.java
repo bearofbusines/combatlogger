@@ -1,4 +1,4 @@
-package org.bear.combatLogger.config;
+package org.bear.combatlogger.config;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

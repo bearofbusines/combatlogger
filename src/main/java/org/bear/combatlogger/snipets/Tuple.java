@@ -1,4 +1,4 @@
-package org.bear.combatLogger.snipets;
+package org.bear.combatlogger.snipets;
 
 public class Tuple<X, Y> {
     public X x;
