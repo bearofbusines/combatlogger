@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
+import java.util.UUID;
 
 public class CombatListener implements Listener {
     public JavaPlugin plugin;
@@ -30,65 +30,87 @@ public class CombatListener implements Listener {
     }
     public void editBossBar(BossBar bossBar, int length, int i, Player player){
         bossBar.setProgress(1-((double) (length - i) / 5));
-        ArrayList<Integer> ids = InCombat.getTaskIds(player.getUniqueId());
-        if (!ids.isEmpty())
-                ids.remove(0);
+        //ArrayList<Integer> ids = InCombat.getTaskIds(player.getUniqueId());
+        //if (!ids.isEmpty())
+        //        ids.remove(0);
     }
-    public ArrayList<Integer> executeBossBarTimer(int length, int time, BossBar bossBar, Player player){
-        ArrayList<Integer> runnables = new ArrayList<Integer>();
+    public void executeBossBarTimer(int length, UUID combatId, BossBar bossBar, Player player){
         for(int i = 0; i < length; i++){
             //System.out.println(i + " started timer");
             int finalI = i;
-            runnables.add(Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
                 @Override
                 public void run() {
+//                    System.out.println(player.getName() + " inCombat?: " + InCombat.isInCombat(player.getUniqueId()));
+//                    System.out.println(player.getName() + " combatId?: " + combatId.toString());
+//                    try {
+//                        System.out.println(player.getName() + " InCombat.combatId?: " + InCombat.getCombatId(player.getUniqueId()).toString());
+//                        System.out.println(player.getName() + " CorrectCombatId?: " + InCombat.getCombatId(player.getUniqueId()).equals(combatId));
+//                    }catch (Exception ignored){
+//
+//                    }
+                    boolean triedCheck = InCombat.isInCombat(player.getUniqueId());
+                    try{
+                        triedCheck = triedCheck && InCombat.getCombatId(player.getUniqueId()).equals(combatId);
+                    }catch (Exception ignored){
+                        System.out.println(player.getName() + "'s Combat Hashmap didnot exist for some reason. triedCheck Value is still:" + triedCheck);
+                    }
+                    if(!triedCheck){
+                        //System.out.println("killend");
+                        return;
+                    }
                     editBossBar(bossBar, length, finalI, player);
-                    InCombat.removeFromCombat(player.getUniqueId());
-                    if (!InCombat.getTaskIds(player.getUniqueId()).isEmpty())
-                        InCombat.getTaskIds(player.getUniqueId()).remove(0);
+                    //System.out.println(player.getName() + " removed from combat");
+                    //InCombat.removeFromCombat(player.getUniqueId());
                 }
-            }, ((length - i) * 20L)));
+            }, ((length - i) * 20L));
         }
-        runnables.add(Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+       Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
             @Override
             public void run() {
-                bossBar.removePlayer(player);
+//                System.out.println(player.getName() + " inCombat?: " + InCombat.isInCombat(player.getUniqueId()));
+//                System.out.println(player.getName() + " combatId?: " + combatId.toString());
+//                try {
+//                    System.out.println(player.getName() + " InCombat.combatId?: " + InCombat.getCombatId(player.getUniqueId()).toString());
+//                    System.out.println(player.getName() + " CorrectCombatId?: " + InCombat.getCombatId(player.getUniqueId()).equals(combatId));
+//                }catch (Exception ignored){
+//
+//                }
+                boolean triedCheck = InCombat.isInCombat(player.getUniqueId());
+                try{
+                    triedCheck = triedCheck && InCombat.getCombatId(player.getUniqueId()).equals(combatId);
+                }catch (Exception ignored){
+                    System.out.println(player.getName() + "'s Combat Hashmap didnot exist for some reason. triedCheck Value is still:" + triedCheck);
+                }
+                if(!triedCheck){
+
+                    //System.out.println("killend");
+                    return;
+                }
+                System.out.println(player.getName() + " removed from combat");
                 InCombat.removeFromCombat(player.getUniqueId());
 
             }
-        }, (length * 20L) + 20));
-        
-        return runnables;
+        }, (length * 20L) + 20);
     }
     public void combatHandler(Player firstPlayer, Player secondPlayer){
-        System.out.println("they handle");
+        //System.out.println("they handle");
         if (!InCombat.isInCombat(firstPlayer.getUniqueId())) {
-            BossBar bossBar = Bukkit.createBossBar(ChatColor.RED + "You are in combat with " + secondPlayer.getName() + " for 5 seconds", BarColor.RED, BarStyle.SOLID);
+            BossBar bossBar = Bukkit.getServer().createBossBar(ChatColor.RED + "You are in combat with " + secondPlayer.getName() + " for 5 seconds", BarColor.RED, BarStyle.SOLID);
             bossBar.addPlayer(firstPlayer);
-            int time = (int) System.currentTimeMillis() + 5;
-            ArrayList<Integer> runnables = executeBossBarTimer(5, time, bossBar, firstPlayer);
-            InCombat.putInCombat(firstPlayer.getUniqueId(), runnables, secondPlayer, bossBar);//time means nothing rn
-            
+            UUID combatId = UUID.randomUUID();
+            InCombat.putInCombat(firstPlayer.getUniqueId(), combatId, secondPlayer, bossBar);//time means nothing rn
+            executeBossBarTimer(5, combatId, bossBar, firstPlayer);
         }else{
-            for (int i : InCombat.getTaskIds(firstPlayer.getUniqueId())) {
-                try {
-                    Bukkit.getScheduler().cancelTask(i);
-                }catch (Exception e){
-                    //unCommentForDebug
-                    //System.out.println("Task ID: " + i +"failed");
-                }
-
-            }
-            int time = (int) System.currentTimeMillis() + 5;
-            BossBar bossBar = Bukkit.createBossBar(ChatColor.RED + "You are in combat with " + secondPlayer.getName() + " for 5 seconds", BarColor.RED, BarStyle.SOLID);
-
-            InCombat.getBossBar(firstPlayer.getUniqueId()).setVisible(false);
-            InCombat.getBossBar(firstPlayer.getUniqueId()).removePlayer(firstPlayer);
-            bossBar.addPlayer(firstPlayer);
-            ArrayList<Integer> runnables = executeBossBarTimer(5, time, bossBar, firstPlayer);
-            InCombat.getBossBar(firstPlayer.getUniqueId()).setProgress(1);
-            InCombat.setBossbar(firstPlayer.getUniqueId() ,bossBar);
-            InCombat.setRunnables(firstPlayer.getUniqueId(), runnables);
+            //BossBar bossBar = Bukkit.getServer().createBossBar(ChatColor.RED + "You are in combat with " + secondPlayer.getName() + " for 5 seconds", BarColor.RED, BarStyle.SOLID);
+            //InCombat.getBossBar(firstPlayer.getUniqueId()).removePlayer(firstPlayer);
+            //bossBar.addPlayer(firstPlayer);
+            UUID combatId = UUID.randomUUID();
+            BossBar currentBossBar = InCombat.getBossBar(firstPlayer.getUniqueId());
+            currentBossBar.setProgress(1);
+            currentBossBar.setTitle(ChatColor.RED + "You are in combat with " + secondPlayer.getName() + " for 5 seconds");
+            InCombat.setCombatId(firstPlayer.getUniqueId(), combatId);
+            executeBossBarTimer(5, combatId, currentBossBar, firstPlayer);
         }
     }
 }

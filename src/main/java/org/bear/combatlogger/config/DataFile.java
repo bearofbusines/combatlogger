@@ -2,12 +2,15 @@ package org.bear.combatlogger.config;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 public class DataFile {
@@ -41,6 +44,10 @@ public class DataFile {
             YamlConfiguration yaml_config = YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
             config.setDefaults(yaml_config);
         }
+    }
+
+    public Plugin getPlugin(){
+        return plugin;
     }
 
     public FileConfiguration getConfig() {
@@ -85,5 +92,14 @@ public class DataFile {
 
         saveDefault();
         reload();
+    }
+    public void resetFile(String path,HashMap<String, Inventory> map){
+        file.delete();
+        file = null;
+
+        File file = new File(plugin.getDataFolder(), name);
+        this.saveDefault();
+        this.getConfig().createSection(path, map);
+        this.reload();
     }
 }

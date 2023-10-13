@@ -1,6 +1,7 @@
 package org.bear.combatlogger.data;
 
 import org.bear.combatlogger.snipets.Thruple;
+import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
@@ -8,17 +9,19 @@ import java.util.*;
 
 public class InCombat {
     //private static final ArrayList<Tetruple<UUID, Integer, Player, BossBar>> inCombat = new ArrayList<Tetruple<UUID, Integer, Player, BossBar>>();
-    private static final HashMap<UUID, Thruple<ArrayList<Integer>, Player, BossBar>> inCombat = new HashMap<>();
+    private static final HashMap<String, Thruple<UUID, Player, BossBar>> inCombat = new HashMap<>();
+
     public static boolean isInCombat(UUID uuid){
-        return inCombat.get(uuid) != null;
+        return inCombat.get(uuid.toString()) != null;
     }
 
     public static boolean removeFromCombat(UUID uuid){
-        return null != inCombat.remove(uuid);
+        InCombat.getBossBar(uuid).removeAll();
+        return null != inCombat.remove(uuid.toString());
     }
 
-    public static void putInCombat(UUID uuid, ArrayList<Integer> runnables, Player otherPlayer, BossBar bossBar){
-        inCombat.put(uuid, new Thruple<>(runnables, otherPlayer, bossBar));
+    public static void putInCombat(UUID uuid, UUID combatId, Player otherPlayer, BossBar bossBar){
+        inCombat.put(uuid.toString(), new Thruple<>(combatId, otherPlayer, bossBar));
     }
     
 //    public static int getIndex(UUID uuid){
@@ -32,24 +35,22 @@ public class InCombat {
 //        return -1;
 //    }
     public static Player getOtherPlayer(UUID uuid){
-        return inCombat.get(uuid).y;
+        return inCombat.get(uuid.toString()).y;
     }
 
-    public static ArrayList<Integer> getTaskIds(UUID uuid){
-        if( inCombat.get(uuid) == null)
-            return new ArrayList<>();
-        return inCombat.get(uuid).x;
+    public static UUID getCombatId(UUID uuid){
+        return inCombat.get(uuid.toString()).x;
     }
 
     public static BossBar getBossBar(UUID uuid) {
-        return inCombat.get(uuid).z;
+        return inCombat.get(uuid.toString()).z;
     }
 
-    public static void setRunnables(UUID uuid,ArrayList<Integer> runnables) {
-        inCombat.get(uuid).x = runnables;
+    public static void setCombatId(UUID uuid,UUID combatId) {
+        inCombat.get(uuid.toString()).x = combatId;
     }
 
     public static void setBossbar(UUID uuid, BossBar bossBar) {
-        inCombat.get(uuid).z = bossBar;
+        inCombat.get(uuid.toString()).z = bossBar;
     }
 }

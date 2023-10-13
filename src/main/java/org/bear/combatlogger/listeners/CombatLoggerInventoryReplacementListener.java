@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class CombatLoggerInventoryReplacementListener implements Listener {
@@ -19,11 +20,10 @@ public class CombatLoggerInventoryReplacementListener implements Listener {
         if(!(deathEvent.getEntity() instanceof Zombie zombie))return;
         if(!CombatLoggedInventories.isInLoggedInventories(zombie.getUniqueId()))return;
 
-        Inventory stupidPlayersInventory = CombatLoggedInventories.getInventory(zombie.getUniqueId());
-        ItemStack[] items = stupidPlayersInventory.getContents();
+        ArrayList<ItemStack> stupidPlayersInventory = CombatLoggedInventories.getInventory(zombie.getUniqueId());
         Location location = zombie.getLocation();
-        for (ItemStack item : items) {
-            System.out.println(item);
+        for (ItemStack item : stupidPlayersInventory) {
+            //System.out.println(item);
             if (item != null)
                 Objects.requireNonNull(location.getWorld()).dropItem(location, item);
         }

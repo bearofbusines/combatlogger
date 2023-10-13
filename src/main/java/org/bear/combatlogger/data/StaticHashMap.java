@@ -4,11 +4,11 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.*;
 
-public class StaticHashMap implements Map<UUID, Inventory>{
-    public HashMap<UUID, Inventory> inventoryHashMap;
+public class StaticHashMap implements Map<String, Inventory>{
+    public HashMap<String, Inventory> inventoryHashMap;
 
     public StaticHashMap(){
-        this.inventoryHashMap = new HashMap<UUID, Inventory>();
+        this.inventoryHashMap = new HashMap<String, Inventory>();
     }
 
     public int size() {
@@ -34,7 +34,7 @@ public class StaticHashMap implements Map<UUID, Inventory>{
         return inventoryHashMap.get(key);
     }
 
-    public boolean containsKey(UUID key) {
+    public boolean containsKey(String key) {
         return inventoryHashMap.containsKey(key);
     }
 
@@ -42,11 +42,11 @@ public class StaticHashMap implements Map<UUID, Inventory>{
         return inventoryHashMap.containsValue(value);
     }
 
-    public Inventory get(UUID key) {
+    public Inventory get(String key) {
         return inventoryHashMap.get(key);
     }
 
-    public Inventory put(UUID key, Inventory value) {
+    public Inventory put(String key, Inventory value) {
         return inventoryHashMap.put(key, value);
     }
 
@@ -55,7 +55,7 @@ public class StaticHashMap implements Map<UUID, Inventory>{
         return inventoryHashMap.remove(key);
     }
 
-    public Object remove(UUID key) {
+    public Object remove(String key) {
         return inventoryHashMap.remove(key);
     }
 
@@ -67,7 +67,7 @@ public class StaticHashMap implements Map<UUID, Inventory>{
         inventoryHashMap.clear();
     }
 
-    public Set<UUID> keySet() {
+    public Set<String> keySet() {
         return inventoryHashMap.keySet();
     }
 
@@ -76,19 +76,19 @@ public class StaticHashMap implements Map<UUID, Inventory>{
     }
 
     @Override
-    public Set<Entry<UUID,Inventory>> entrySet() {
+    public Set<Entry<String,Inventory>> entrySet() {
         return inventoryHashMap.entrySet();
     }
 
-    public boolean remove(UUID key, Inventory value) {
+    public boolean remove(String key, Inventory value) {
         return inventoryHashMap.remove(key, value);
     }
 
-    public boolean replace(UUID key, Inventory oldValue, Inventory newValue) {
+    public boolean replace(String key, Inventory oldValue, Inventory newValue) {
         return inventoryHashMap.replace(key, oldValue, newValue);
     }
 
-    public Inventory replace(UUID key, Inventory value) {
+    public Inventory replace(String  key, Inventory value) {
         return inventoryHashMap.replace(key, value);
     }
 }
