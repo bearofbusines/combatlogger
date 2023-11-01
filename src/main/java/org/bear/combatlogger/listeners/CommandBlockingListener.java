@@ -11,6 +11,7 @@ public class CommandBlockingListener implements Listener {
     @EventHandler
     public void onCommandPreprocess(PlayerCommandPreprocessEvent event){
         if(InCombat.isInCombat(event.getPlayer().getUniqueId())){
+            if(event.getPlayer().isOp())return;
             event.setCancelled(true);
             event.getPlayer().sendMessage("You can't execute commands in combat silly ;)");
         }

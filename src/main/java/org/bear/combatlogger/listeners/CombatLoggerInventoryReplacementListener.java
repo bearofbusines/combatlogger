@@ -3,6 +3,7 @@ package org.bear.combatlogger.listeners;
 import org.bear.combatlogger.CombatLogger;
 import org.bear.combatlogger.data.CombatLoggedInventories;
 import org.bukkit.Location;
+import org.bukkit.entity.Villager;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,17 +18,17 @@ public class CombatLoggerInventoryReplacementListener implements Listener {
     @EventHandler
     public void mobDeath(EntityDeathEvent deathEvent){
         if(CombatLogger.disableing) return;
-        if(!(deathEvent.getEntity() instanceof Zombie zombie))return;
-        if(!CombatLoggedInventories.isInLoggedInventories(zombie.getUniqueId()))return;
+        if(!(deathEvent.getEntity() instanceof Villager villager))return;
+        if(!CombatLoggedInventories.isInLoggedInventories(villager.getUniqueId()))return;
 
-        ArrayList<ItemStack> stupidPlayersInventory = CombatLoggedInventories.getInventory(zombie.getUniqueId());
-        Location location = zombie.getLocation();
+        ArrayList<ItemStack> stupidPlayersInventory = CombatLoggedInventories.getInventory(villager.getUniqueId());
+        Location location = villager.getLocation();
         for (ItemStack item : stupidPlayersInventory) {
             //System.out.println(item);
             if (item != null)
                 Objects.requireNonNull(location.getWorld()).dropItem(location, item);
         }
-        CombatLoggedInventories.removeFromLoggedInventories(zombie.getUniqueId());
+        CombatLoggedInventories.removeFromLoggedInventories(villager.getUniqueId());
 
     }
 }

@@ -6,6 +6,7 @@ import org.bear.combatlogger.data.InCombat;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,13 +25,13 @@ public class CombatLoggingListener implements Listener {
         if(CombatLogger.disableing) return;
         Player player = quitEvent.getPlayer();
         if (!InCombat.isInCombat(player.getUniqueId()))return;
-
+        //InCombat.removeFromCombat(InCombat.getOtherPlayer(player.getUniqueId()).getUniqueId());
         Inventory inventory = Bukkit.createInventory(null,45);
         inventory.setContents(player.getInventory().getContents().clone());
         Location location = player.getLocation();
 
-        Zombie zombie = (Zombie) Objects.requireNonNull(location.getWorld()).spawnEntity(location, EntityType.ZOMBIE, false);
-        zombie.setAI(false);
+        Villager villager = (Villager) Objects.requireNonNull(location.getWorld()).spawnEntity(location, EntityType.VILLAGER, false);
+        villager.setAI(false);
 
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skullMeta = (SkullMeta)skull.getItemMeta();
@@ -41,16 +42,16 @@ public class CombatLoggingListener implements Listener {
 
         player.getInventory().clear();
 
-        Objects.requireNonNull(zombie.getEquipment()).setHelmet(skull);//will never be null
-        zombie.setCustomName(player.getName());
+        Objects.requireNonNull(villager.getEquipment()).setHelmet(skull);//will never be null
+        villager.setCustomName(player.getName());
 
 
 
 
-        CombatLoggedInventories.putInLoggedInventories(zombie.getUniqueId(), inventory);
+        CombatLoggedInventories.putInLoggedInventories(villager.getUniqueId(), inventory);
         player.setHealth(0);
         Player otherPlayer = InCombat.getOtherPlayer(player.getUniqueId());
-        Bukkit.broadcastMessage(ChatColor.YELLOW + bullyText(otherPlayer) + " combat logged on " + player.getName());
+        Bukkit.broadcastMessage(ChatColor.YELLOW + bullyText(player) + " combat logged on " + otherPlayer.getName());
 
         InCombat.removeFromCombat(player.getUniqueId());
 
