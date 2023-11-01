@@ -7,6 +7,7 @@ import org.bear.combatlogger.data.InCombat;
 import org.bear.combatlogger.listeners.CombatLoggingListener;
 import org.bear.combatlogger.listeners.CombatListener;
 import org.bear.combatlogger.listeners.CombatLoggerInventoryReplacementListener;
+import org.bear.combatlogger.listeners.CommandBlockingListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class CombatLogger extends JavaPlugin {
@@ -22,7 +23,9 @@ public final class CombatLogger extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CombatLoggingListener(), this);
         getServer().getPluginManager().registerEvents(new CombatListener(this), this);
         getServer().getPluginManager().registerEvents(new CombatLoggerInventoryReplacementListener(), this);
+        getServer().getPluginManager().registerEvents(new CommandBlockingListener(), this);
         this.getCommand("combatconfig").setExecutor(new ChangeConfigCommand());
+        this.getCommand("combatconfig").setTabCompleter(new ChangeConfigCommand());
     }
 
     @Override
