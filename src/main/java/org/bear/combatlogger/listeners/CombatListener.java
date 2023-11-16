@@ -9,6 +9,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,7 +21,7 @@ public class CombatListener implements Listener {
     public CombatListener(JavaPlugin plugin){
         this.plugin = plugin;
     }
-    @EventHandler
+    @EventHandler (priority = EventPriority.MONITOR)
     public void onPlayerAttack(EntityDamageByEntityEvent attackEvent){
         if(CombatLogger.disableing) return;
         if (!(attackEvent.getDamager() instanceof Player damager && attackEvent.getEntity() instanceof Player damagee)) return;
