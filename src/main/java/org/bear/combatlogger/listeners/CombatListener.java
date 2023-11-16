@@ -26,6 +26,7 @@ public class CombatListener implements Listener {
         if (!(attackEvent.getDamager() instanceof Player damager && attackEvent.getEntity() instanceof Player damagee)) return;
         //if (!InCombat.isInCombat(damager.getUniqueId()))
         if(attackEvent.getFinalDamage()==0D) return;
+        if(attackEvent.isCancelled()) return;
         combatHandler(damager, damagee);
         combatHandler(damagee, damager);
     }
