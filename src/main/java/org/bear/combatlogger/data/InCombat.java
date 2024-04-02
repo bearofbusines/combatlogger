@@ -1,7 +1,6 @@
 package org.bear.combatlogger.data;
 
-import org.bear.combatlogger.snipets.Thruple;
-import org.bukkit.Bukkit;
+import org.bear.combatlogger.snippets.Thruple;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 

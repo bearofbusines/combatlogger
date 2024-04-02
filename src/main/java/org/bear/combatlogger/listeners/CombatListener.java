@@ -23,7 +23,7 @@ public class CombatListener implements Listener {
     }
     @EventHandler (priority = EventPriority.MONITOR)
     public void onPlayerAttack(EntityDamageByEntityEvent attackEvent){
-        if(CombatLogger.disableing) return;
+        if(CombatLogger.disabling) return;
         if (!(attackEvent.getDamager() instanceof Player damager && attackEvent.getEntity() instanceof Player damagee)) return;
         //if (!InCombat.isInCombat(damager.getUniqueId()))
         if(attackEvent.getFinalDamage()==0D) return;

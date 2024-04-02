@@ -3,7 +3,6 @@ package org.bear.combatlogger;
 import org.bear.combatlogger.commands.ChangeConfigCommand;
 import org.bear.combatlogger.config.DataFile;
 import org.bear.combatlogger.data.CombatLoggedInventories;
-import org.bear.combatlogger.data.InCombat;
 import org.bear.combatlogger.listeners.CombatLoggingListener;
 import org.bear.combatlogger.listeners.CombatListener;
 import org.bear.combatlogger.listeners.CombatLoggerInventoryReplacementListener;
@@ -12,11 +11,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class CombatLogger extends JavaPlugin {
 
-    public static boolean disableing;
+    public static boolean disabling;
     public static DataFile config;
     @Override
     public void onEnable() {
-        disableing = false;
+        disabling = false;
         // Plugin startup logic
         CombatLogger.config = new DataFile(this, "config.yml");
         CombatLoggedInventories.setLoggedInventories(new DataFile(this, "loggedInventories.yml"));
@@ -30,7 +29,7 @@ public final class CombatLogger extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        disableing = true;
+        disabling = true;
         // Plugin shutdown logic
     }
 }

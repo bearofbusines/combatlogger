@@ -1,4 +1,4 @@
-package org.bear.combatlogger.snipets;
+package org.bear.combatlogger.snippets;
 
 public class Thruple<X, Y, Z> {
     public X x;

@@ -7,7 +7,6 @@ import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
-import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -22,7 +21,7 @@ public class CombatLoggingListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent quitEvent){
-        if(CombatLogger.disableing) return;
+        if(CombatLogger.disabling) return;
         Player player = quitEvent.getPlayer();
         if (!InCombat.isInCombat(player.getUniqueId()))return;
         //InCombat.removeFromCombat(InCombat.getOtherPlayer(player.getUniqueId()).getUniqueId());
